@@ -22,11 +22,20 @@
 
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav">
+                    @if(Auth::check())
                         <li class="nav-item {{ Str::contains(Request::path(), 'authors') ? 'active' : '' }}"><a class="nav-link" href="/authors">Autori</a></li>
+                        <li class="nav-item {{ Str::contains(Request::path(), 'genres') ? 'active' : '' }}"><a class="nav-link" href="/genres">Žanri</a></li>
+                        <li class="nav-item {{ Str::contains(Request::path(), 'books') ? 'active' : '' }}"><a class="nav-link" href="/books">Grāmatas</a></li>
+                        <li class="nav-item float-right"><a class="nav-link" href="/logout">Beigt darbu</a></li>
+                        
+                    @else
+                        <li class="nav-item float-right"><a class="nav-link" href="/login">Pieslēgties</a></li>
+                    @endif
                     </ul>
                 </div>
             </div>
         </nav>
+
 
 
     <main class="container">
@@ -36,8 +45,9 @@
     <div class="bg-light text-muted pt-5 pb-5 mt-5">
     <footer class="container">
     <p>VeA, 2020</p>
+    <p1>Reinis Simsons</p1>
     </footer>
     </div>
-
+    <script src="/main.js"></script>
     </body>
     </html>

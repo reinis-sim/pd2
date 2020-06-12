@@ -2,11 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreAuthor;
 use Illuminate\Http\Request;
 use App\Author;
 
 class AuthorController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+
+
     public function index()
     {
         $items = Author::orderBy('name', 'asc')->get();
@@ -24,20 +33,15 @@ class AuthorController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store(StoreAuthor $request)
     {
-        $validatedData = $request->validate([
-            'name' => 'required',
-            'display' => 'nullable',
-        ]);
-
         $author = new Author();
 
-        $author->name = $validatedData['name'];
-        $author->display = (bool) ($validated['display'] ?? false);
+        $this->saveAuthorData($author, $request);
 
         return redirect('/authors');
     }
+
 
     public function edit(Author $author)
     {
@@ -49,23 +53,28 @@ class AuthorController extends Controller
 
     public function update(Author $author, StoreAuthor $request)
     {
-        $validatedData = $request->validate([
-            'name' => 'required',
-            'display' => 'nullable',
-        ]);
-
-
-        $author->name = $validatedData['name'];
-        $author->display = (bool) ($validated['display'] ?? false);
+        $this->saveAuthorData($author, $request);
 
         return redirect('/authors');
     }
+
 
     public function delete(Author $author)
     {
         $author->delete();
         return redirect('/authors');
     }
+
+    private function saveAuthorData($author, $request)
+    {
+        $validated = $request->validated();
+
+        $author->name = $validated['name'];
+        $author->display = (bool) ($validated['display'] ?? false);
+
+        $author->save();
+    }
+
 
 
 
